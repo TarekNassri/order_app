@@ -4,11 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:order_app/AuthPage.dart';
-import 'package:order_app/Utils.dart';
-import 'package:order_app/ForgetPasswordPage.dart';
+import 'package:order_app/Login_Files/AuthPage.dart';
+import 'package:order_app/Login_Files/Utils.dart';
+import 'package:order_app/Login_Files/ForgetPasswordPage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:order_app/verfiy_email_page.dart';
+import 'package:order_app/Login_Files/verfiy_email_page.dart';
 
 
 

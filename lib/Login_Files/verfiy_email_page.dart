@@ -4,8 +4,8 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:order_app/HomePage.dart';
-import 'package:order_app/Utils.dart';
+import 'package:order_app/Login_Files/HomePage.dart';
+import 'package:order_app/Login_Files/Utils.dart';
 
 class VerfiyEmailPage extends StatefulWidget {
   const VerfiyEmailPage({Key? key}) : super(key: key);

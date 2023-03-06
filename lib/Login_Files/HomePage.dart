@@ -4,11 +4,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:order_app/Resturant_Item.dart';
 import 'package:order_app/get_User_Name.dart';
 
-import 'AnimatedButton.dart';
+import '../AnimatedButton.dart';
 
 class HomePage extends StatefulWidget  {
   @override
@@ -58,10 +60,7 @@ class _HomePageState extends State<HomePage> {
               ),
               GestureDetector(
                 onTap: () {
-                 Navigator.push(
-                  context,
-                   MaterialPageRoute(builder: (context) => BouncingButton()),
-                  );
+
                 },
                 child: ListTile(
                   leading: Icon(Icons.account_circle),
