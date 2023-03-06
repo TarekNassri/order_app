@@ -1,11 +1,13 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'Utils.dart';
+import 'package:order_app/GetLocation.dart';
 
 class RegisterPage extends StatefulWidget {
 final Function() onClickedSignIn;
@@ -31,30 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final Strasse_Kontroller= TextEditingController();
   final PLZ_Kontroller= TextEditingController();
   final ORT_Kontroller= TextEditingController();
-
-
-  bool checkTextFieldEmptyOrNot(){
-    String text1,text2 ,text3,text4 ,text5 ,text6,text7,text8;
-    // Getting Value From Text Field and Store into String Variable
-    text1 = email_Kontroller.text ;
-    text2 = password_Kontroller.text ;
-    text3 = wpassword_Kontroller.text ;
-    text4 = vornameKontroller.text ;
-    text5 = nachname_Kontroller.text ;
-    text6 = Strasse_Kontroller.text ;
-    text7 = PLZ_Kontroller.text ;
-    text8 = ORT_Kontroller.text ;
-
-    // Checking all TextFields.
-    if(text1 == '' || text2 == ''|| text3 == ''|| text4 == ''|| text5 == '')
-    {// Put your code here which you want to execute when Text Field is Empty.
-      return false;
-    }else{
-      // Put your code here, which you want to execute when Text Field is NOT Empty.
-      return true;
-    }
-  }
-
+  late Position position;
   @override
   void dispose() {
      email_Kontroller.dispose();
@@ -174,17 +153,49 @@ class _RegisterPageState extends State<RegisterPage> {
                       border:Border.all(color:Colors.white),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: TextField(
-                        controller: Strasse_Kontroller,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText :'Straße'
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 200,
+                          height: 50,
+                          child: Padding(
+
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: TextField(
+
+                              controller: Strasse_Kontroller,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText :'Straße'
+                              ),
+
+                            ),
+                          ),
                         ),
-                      ),
+
+                        Container(
+                          width: 150,
+                          height: 50,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20.0),
+                            child:    IconButton(
+                              icon: const Icon(Icons.location_on_outlined, size: 30
+                              ),
+                                onPressed: () async{
+                                Position position = await GetLocation1().getGeoLocationPosition();
+                                GetLocation1().GetAddressFromLatLong(position,Strasse_Kontroller,PLZ_Kontroller,ORT_Kontroller);
+                                },
+                                alignment: Alignment.topRight,
+
+                            ),
+
+                          ),
+                        )
+                      ],
                     ),
+
                   ),
+
                 ),
                 SizedBox(height: 10,),
                 Padding(
@@ -390,7 +401,7 @@ class _RegisterPageState extends State<RegisterPage> {
      ,vornameKontroller.text.trim()
      ,nachname_Kontroller.text.trim()
      ,Strasse_Kontroller.text.trim()
-     ,int.parse(PLZ_Kontroller.text.trim())
+     ,PLZ_Kontroller.text.trim()
      ,ORT_Kontroller.text.trim());
 
     } on FirebaseAuthException catch(e) {
@@ -400,7 +411,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  Future addUserDetails(String email,String password,String wpassword,String vorname,String nachname,String Strasse,int PLZ,String ORT) async{
+  Future addUserDetails(String email,String password,String wpassword,String vorname,String nachname,String Strasse,String PLZ,String ORT) async{
     await FirebaseFirestore.instance.collection('Users_id').add(
         {'email':email,
           'password':password,
