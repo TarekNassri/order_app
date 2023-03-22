@@ -3,10 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:order_app/bestellung.dart';
 
-
-
-
-
 class returant extends StatelessWidget {
   final String name;
   final String ResturantName;
@@ -23,7 +19,9 @@ class returant extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const GeeksForGeeks()),
+                MaterialPageRoute(
+                    builder: (context) =>
+                        FoodList(resturant_name: this.ResturantName)),
               );
             },
             child: Card(
@@ -46,8 +44,7 @@ class returant extends StatelessWidget {
                         Colors.deepOrange,
                         Colors.purple,
                       ],
-                    )
-                ),
+                    )),
                 child: Row(
                   children: <Widget>[
                     itemcake(ResturantName),
@@ -61,19 +58,15 @@ class returant extends StatelessWidget {
                           alignment: Alignment.topRight,
                           image: AssetImage(ImagePath),
                         ),
-
                       ),
                     ),
-
                   ],
                 ),
               ),
             ),
           ),
-        )
-    );
+        ));
   }
-
 
   static Widget itemcake(String name) {
     return Container(
@@ -89,7 +82,8 @@ class returant extends StatelessWidget {
               style: GoogleFonts.bebasNeue(
                   fontWeight: FontWeight.bold,
                   fontSize: 30,
-                  color: Colors.white),),
+                  color: Colors.white),
+            ),
           ),
           SizedBox(
             height: 5,
