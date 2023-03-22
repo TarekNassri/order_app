@@ -4,13 +4,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:order_app/Resturant_Item.dart';
 import 'package:order_app/get_User_Name.dart';
 
-import '../AnimatedButton.dart';
+import 'EditProfile.dart';
 
 class HomePage extends StatefulWidget  {
   @override
@@ -52,7 +50,7 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   color: Colors.deepOrange,
                 ),
-                child: get_Value_Database('nachname'),
+                child: get_Value_Database('vorname'),
               ),
               ListTile(
                 leading: Icon(Icons.message),
@@ -60,11 +58,14 @@ class _HomePageState extends State<HomePage> {
               ),
               GestureDetector(
                 onTap: () {
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  EditProfile()),
+                  );
                 },
                 child: ListTile(
                   leading: Icon(Icons.account_circle),
-                  title: Text('Profile',
+                  title: Text('Persönliche Daten ändern',
                   ),
                 ),
               ),
@@ -132,32 +133,32 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             returant("res1", "Om Anas", 'photo/traditional.food.Italien.png'),
-            returant("res2", "Om Ahmed", 'photo/traditional.food.Italien.png'),
-            returant("res2", "Om Ahmed", 'photo/traditional.food.Italien.png'),
-            returant("res2", "Om Ahmed", 'photo/traditional.food.Italien.png'),
           ],
         ),
       ),
     );
   }
 
-  List<String> email = [];
+  List<String> email2 = [];
   List<String> docIds = [];
   Future getName() async {
     await FirebaseFirestore.instance.collection('Users_id').get().then((
         snapshot) =>
         snapshot.docs.forEach((document) {
-          email.add(document['email']);
+          email2.add(document['email']);
           docIds.add(document.reference.id);
 
         }));
+
+
+
+
   }
-  Widget get_Value_Database(String value) {
+   Widget get_Value_Database(String value) {
     return FutureBuilder(future: getName(),
                       builder: (context, snapshot) {
                         for (var i = 0; i < docIds.length; i++) {
-
-                          if (email[i]==user.email) {
+                          if (email2[i]==user.email) {
                             return  get_User_Name(docId: docIds[i],value: value,);
                           }
                         }

@@ -23,7 +23,7 @@ class get_User_Name extends StatelessWidget {
         if(snapshot.connectionState==ConnectionState.done){
          //print(snapshot.data!.data());
           Map<String,dynamic>data= snapshot.data!.data() as Map<String,dynamic>;
-            return Text('          Hallo '+ data[value],
+            return Text(data[value],
                 style: GoogleFonts.bebasNeue(
                     fontSize: 30,
                     color: Colors.black
