@@ -225,15 +225,22 @@ class SecondPage extends StatelessWidget {
 }
 
 class ThirdPage extends StatelessWidget {
-  CollectionReference orders =
-      FirebaseFirestore.instance.collection('not_orders');
+  CollectionReference orders = FirebaseFirestore.instance.collection('orders');
   final List<Food> fooditems;
   final double total_price;
 
   ThirdPage({required this.fooditems, required this.total_price});
 
+  void printAllOrders() async {
+    QuerySnapshot querySnapshot = await orders.get();
+    querySnapshot.docs.forEach((doc) {
+      print(doc.data());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    printAllOrders();
     return Scaffold(
       appBar: AppBar(title: Text('Weiter')),
       body: Center(
@@ -245,7 +252,7 @@ class ThirdPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 await orders.add({
-                  'foods': 'pizza',
+                  'foods': 'pizza222',
                   'price': 33.10,
                   'quantity': 10,
                   'resturant_name': 'om_ahamad_new',
