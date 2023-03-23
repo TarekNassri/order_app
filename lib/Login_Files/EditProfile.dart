@@ -15,8 +15,6 @@ class EditProfile1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Scaffold();
   }
-
-
 }
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
@@ -25,7 +23,7 @@ class EditProfile extends StatefulWidget {
   State<EditProfile> createState() => _EditProfile1State();
 }
 
-class _EditProfile1State extends State<EditProfile> {
+class _EditProfile1State extends State<EditProfile>with SingleTickerProviderStateMixin {
   final user = FirebaseAuth.instance.currentUser!;
   final userCollection = FirebaseFirestore.instance.collection("Users_id");
   late String email;
@@ -44,6 +42,16 @@ class _EditProfile1State extends State<EditProfile> {
   final Strasse_Kontroller = TextEditingController();
   final PLZ_Kontroller = TextEditingController();
   final ORT_Kontroller = TextEditingController();
+  late double _scale;
+  late AnimationController _controller;
+
+
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
 
   Future<void> getValue() async {
     userCollection.get().then((querySnapshot) {
@@ -75,16 +83,29 @@ class _EditProfile1State extends State<EditProfile> {
       print("Error getting documents: $error");
     });
   }
-
   @override
   void initState() {
     getValue();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(
+        milliseconds: 500,
+      ),
+      lowerBound: 0.0,
+      upperBound: 0.1,
+    )..addListener(() {
+      setState(() {});
+    });
     super.initState();
   }
 
 
+
+
   @override
   Widget build(BuildContext context) {
+    _scale = 1 - _controller.value;
+
     return Scaffold(
       backgroundColor: Colors.grey[300],
       // ignore: prefer_const_literals_to_create_immutables
@@ -93,17 +114,12 @@ class _EditProfile1State extends State<EditProfile> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-
               children: [
-                SizedBox(height: 20,),
-
                 Icon(Icons.settings,
                   size: 50,
                 ),
                 //Hello Again
                 // ignore: prefer_const_constructors
-
-
                 Text("Konto Daten ändern"
                   , style: GoogleFonts.bebasNeue(
                       fontSize: 25
@@ -111,17 +127,7 @@ class _EditProfile1State extends State<EditProfile> {
                 ),
                 SizedBox(height: 100,),
                 //email textfield
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
 
-                  ),
-                ),
                 //password Textfield
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -232,61 +238,20 @@ class _EditProfile1State extends State<EditProfile> {
                 ),
 
                 //password Textfield
-                SizedBox(height: 10,),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Container(
 
-
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: TextField(
-                        controller: password_Kontroller,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: ' Password'
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
                 // sign in button
-                SizedBox(height: 10,),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Container(
 
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: TextField(
-                        controller: wpassword_Kontroller,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: ' Password Wiederholen'
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
                 // sign in button
                 SizedBox(height: 10,),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: GestureDetector(
+                    onTapDown: _tapDown,
+                    onTapUp: _tapUp,
                     onTap: aenderungsSpeichern,
+                    child: Transform.scale(
+                      scale: _scale,
                     child: Container(
                         padding: EdgeInsets.all(25),
                         decoration: BoxDecoration(
@@ -309,10 +274,9 @@ class _EditProfile1State extends State<EditProfile> {
                         )
 
                     ),
+                    )
                   ),
                 ),
-
-                SizedBox(height: 10,),
 
                 // not  a member?? register now
 
@@ -347,8 +311,6 @@ class _EditProfile1State extends State<EditProfile> {
 
     // Update the document with new data
     docRef.update({
-      'password': password_Kontroller.text,
-      'wpassword': wpassword_Kontroller.text,
       'vorname': vornameKontroller.text,
       'nachname': nachname_Kontroller.text,
       'Strasse': Strasse_Kontroller.text,
@@ -358,6 +320,11 @@ class _EditProfile1State extends State<EditProfile> {
         .then((value) => print('Document updated successfully'))
         .catchError((error) => print('Failed to update document: $error'));
   }
-
+  void _tapDown(TapDownDetails details) {
+    _controller.forward();
+  }
+  void _tapUp(TapUpDetails details) {
+    _controller.reverse();
+  }
 }
 

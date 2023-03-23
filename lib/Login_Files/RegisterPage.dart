@@ -23,7 +23,7 @@ required this.onClickedSignIn,
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState extends State<RegisterPage>with SingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
   final email_Kontroller= TextEditingController();
   final password_Kontroller= TextEditingController();
@@ -34,8 +34,28 @@ class _RegisterPageState extends State<RegisterPage> {
   final PLZ_Kontroller= TextEditingController();
   final ORT_Kontroller= TextEditingController();
   late Position position;
+
+
+  late double _scale;
+  late AnimationController _controller;
   @override
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(
+        milliseconds: 500,
+      ),
+      lowerBound: 0.0,
+      upperBound: 0.1,
+    )..addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
+
   void dispose() {
+    _controller.dispose();
      email_Kontroller.dispose();
      password_Kontroller.dispose ();
      wpassword_Kontroller.dispose();
@@ -51,6 +71,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    _scale = 1 - _controller.value;
+
     return  Scaffold (
       body: SafeArea(
         child: Center(
@@ -296,6 +318,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: GestureDetector(
                     onTap: signUp,
+                    onTapDown: _tapDown,
+                    onTapUp: _tapUp,
+
+                    child: Transform.scale(
+                      scale: _scale,
                     child: Container(
                         padding: EdgeInsets.all(20),
                         decoration: BoxDecoration(
@@ -326,8 +353,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         )
                     ),
+                    )
                   ),
                 ),
+
                 SizedBox(height: 10,),
                 // not  a member?? register now
                 RichText(text: TextSpan(
@@ -423,5 +452,11 @@ class _RegisterPageState extends State<RegisterPage> {
           'ORT':ORT,
         }
     );
+  }
+  void _tapDown(TapDownDetails details) {
+    _controller.forward();
+  }
+  void _tapUp(TapUpDetails details) {
+    _controller.reverse();
   }
 }

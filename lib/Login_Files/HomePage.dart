@@ -16,14 +16,43 @@ class HomePage extends StatefulWidget  {
 }
 
 final navigatorKey = GlobalKey<NavigatorState>();
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   final user = FirebaseAuth.instance.currentUser!;
+  late double _scale;
+  late AnimationController _controller;
   @override
   void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(
+        milliseconds: 500,
+      ),
+      lowerBound: 0.0,
+      upperBound: 0.1,
+    )..addListener(() {
+      setState(() {});
+    });
     super.initState();
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
+
+
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
+    _scale = 1 - _controller.value;
+
     return MaterialApp(
       navigatorKey: navigatorKey,
       title: 'Essen ist leben',
@@ -133,9 +162,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             returant("res1", "Om Anas", 'photo/traditional.food.Italien.png'),
-            returant("res1", "Om Ahmad", 'photo/traditional.food.Italien.png'),
-            returant("res1", "Om Anas", 'photo/traditional.food.Italien.png'),
-            returant("res1", "Om Ahmad", 'photo/traditional.food.Italien.png'),
+            returant("res2", "Om Ahmad", 'photo/traditional.food.Italien.png'),
+            returant("res3", "Om Anas1", 'photo/traditional.food.Italien.png'),
+            returant("res4", "Om Ahmad2", 'photo/traditional.food.Italien.png'),
 
           ],
         ),
@@ -151,12 +180,7 @@ class _HomePageState extends State<HomePage> {
         snapshot.docs.forEach((document) {
           email2.add(document['email']);
           docIds.add(document.reference.id);
-
         }));
-
-
-
-
   }
    Widget get_Value_Database(String value) {
     return FutureBuilder(future: getName(),
@@ -167,8 +191,15 @@ class _HomePageState extends State<HomePage> {
                           }
                         }
                         return Text('Loading..');
-                      }
+
+    }
                   );
+  }
+  void _tapDown(TapDownDetails details) {
+    _controller.forward();
+  }
+  void _tapUp(TapUpDetails details) {
+    _controller.reverse();
   }
 }
 

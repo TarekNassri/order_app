@@ -47,18 +47,38 @@ class LoginDemo extends StatefulWidget {
   _LoginDemoState createState() => _LoginDemoState();
 }
 
-class _LoginDemoState extends State<LoginDemo> {
+class _LoginDemoState extends State<LoginDemo>with SingleTickerProviderStateMixin {
   final email_kontroller = TextEditingController();
   final password_Kontroller = TextEditingController();
+
+    late double _scale;
+   late AnimationController _controller;
   @override
-  void dispose() {
-    email_kontroller.dispose();
-    password_Kontroller.dispose();
-    super.dispose();
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(
+        milliseconds: 500,
+      ),
+      lowerBound: 0.0,
+      upperBound: 0.1,
+    )..addListener(() {
+      setState(() {});
+    });
+    super.initState();
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+    _scale = 1 - _controller.value;
     return Scaffold(
       backgroundColor: Colors.grey[300],
       // ignore: prefer_const_literals_to_create_immutables
@@ -159,7 +179,12 @@ class _LoginDemoState extends State<LoginDemo> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: GestureDetector(
+                    onTapDown: _tapDown,
+                    onTapUp: _tapUp,
+
                     onTap: signIn,
+                    child: Transform.scale(
+                      scale: _scale,
                     child: Container(
                         padding: EdgeInsets.all(20),
                         decoration: BoxDecoration(
@@ -190,6 +215,7 @@ class _LoginDemoState extends State<LoginDemo> {
                             ),
                           ),
                         )),
+                    )
                   ),
                 ),
                 SizedBox(
@@ -259,5 +285,11 @@ class _LoginDemoState extends State<LoginDemo> {
         ),
       ),
     );
+  }
+  void _tapDown(TapDownDetails details) {
+    _controller.forward();
+  }
+  void _tapUp(TapUpDetails details) {
+    _controller.reverse();
   }
 }
