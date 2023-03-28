@@ -43,12 +43,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
 
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     _scale = 1 - _controller.value;
@@ -61,10 +55,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
           backgroundColor: Colors.grey[300],
           title: Center(
-            child: Text('Essen ist leben',
-              style: GoogleFonts.bebasNeue(
-                  fontSize: 30,
-                  color: Colors.black
+            child: Text(
+              'Entdecke leckere Rezepte auf Knopfdruck',
+
+              style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                fontFamily: 'Entdecke leckere Rezepte auf Knopfdruck',
               ),
             ),
           ),
@@ -133,7 +131,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       CircleAvatar(
-                        backgroundColor: Colors.deepOrange,
+                        backgroundColor: Colors.green,
                         minRadius: 35.0,
                         child: Icon(
                           Icons.call,
@@ -141,19 +139,27 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         ),
                       ),
                       CircleAvatar(
-                        backgroundColor: Colors.black,
+
                         minRadius: 60.0,
+                        backgroundColor: Colors.white,
                         child: CircleAvatar(
+                          backgroundColor: Colors.white,
                           radius: 50.0,
+                          child: Icon(
+                            Icons.food_bank_outlined,
+                            size: 100.0,
+                            color: Colors.deepOrange,
+                          ),
 
                         ),
                       ),
                       CircleAvatar(
-                        backgroundColor: Colors.purple,
+                        backgroundColor: Colors.lightBlue,
                         minRadius: 35.0,
                         child: Icon(
                           Icons.message,
                           size: 30.0,
+                          color: Colors.black,
                         ),
                       ),
                     ],
