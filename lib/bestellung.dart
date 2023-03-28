@@ -61,7 +61,7 @@ class _FoodListState extends State<FoodList> {
         price: 11.99),
   ];
 
-  final List<Food> _foods_om_Ahmad = [
+  final List<Food> _foods_om_Ahmad=[
     Food(name: 'RiceAndBazella', quantity: 0, imageUrl: '', price: 20.00),
     Food(name: 'kubba', quantity: 0, imageUrl: '', price: 30.00),
     Food(name: 'kabsa', quantity: 0, imageUrl: '', price: 25.00)

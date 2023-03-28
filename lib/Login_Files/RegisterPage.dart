@@ -34,10 +34,9 @@ class _RegisterPageState extends State<RegisterPage>with SingleTickerProviderSta
   final PLZ_Kontroller= TextEditingController();
   final ORT_Kontroller= TextEditingController();
   late Position position;
-
-
   late double _scale;
   late AnimationController _controller;
+
   @override
   void initState() {
     _controller = AnimationController(
@@ -204,6 +203,7 @@ class _RegisterPageState extends State<RegisterPage>with SingleTickerProviderSta
                               icon: const Icon(Icons.location_on_outlined, size: 30
                               ),
                                 onPressed: () async{
+
                                 Position position = await GetLocation1().getGeoLocationPosition();
                                 GetLocation1().GetAddressFromLatLong(position,Strasse_Kontroller,PLZ_Kontroller,ORT_Kontroller);
                                 },
